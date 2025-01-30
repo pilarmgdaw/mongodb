@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alimentos</title>
+</head>
+<body>
+    
+<h1>HOLA, ESTA ES MI PÁGINA ESTÁTICA DE ALIMENTOS</h1>
+<h1>Lista de Alimentos</h1>
+<button id="cogeAlimentos">Obtener Alimentos</button>
+
+<table id="tablaAlimentos" border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Color</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    document.getElementById("cogeAlimentos")
+      .addEventListener("click", () => {
+        fetch("/alimentos")  // Aquí cambiamos la ruta de /producto a /alimentos
+          .then(response => response.json())
+          .then(data => {
+            const table = document.getElementById("tablaAlimentos");
+            const tbody = table.querySelector("tbody");
+            tbody.innerHTML = ""; // Limpia la tabla
+  
+            for (let alimento of data) {
+              const fila = document.createElement("tr");
+              fila.innerHTML = `
+                <td>${alimento._id}</td>  <!-- Utilizamos _id como identificador en MongoDB -->
+                <td>${alimento.nombre}</td>
+                <td>${alimento.precio}</td>
+                <td>${alimento.categoria}</td>
+                <td>${alimento.color}</td>
+              `;
+              tbody.appendChild(fila);
+            }
+          })
+          .catch(error => console.error("Error:", error));
+      });
+</script>
+
+</body>
+</html>
